@@ -7,4 +7,4 @@ $config = new Configuration();
 
 return $config
     ->addPathToScan(__DIR__ . '/bin/deptrac', isDev: false)
-    ->ignoreErrorsOnPath(__DIR__ . '/tests', [ErrorType::UNKNOWN_CLASS]); // keep ability to test invalid symbols
+    ->ignoreErrorsOnPath(__DIR__ . '/tests', [ErrorType::UNKNOWN_CLASS, ErrorType::UNKNOWN_FUNCTION]); // keep ability to test invalid symbols
