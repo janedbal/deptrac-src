@@ -127,19 +127,16 @@ final class ServiceContainerBuilder
         } catch (Exception $exception) {
             throw CannotLoadConfiguration::fromServices('services.php', $exception->getMessage());
         }
-
-        try {
-            $loader->load('cache.php');
-        } catch (Exception $exception) {
-            throw CannotLoadConfiguration::fromCache('cache.php', $exception->getMessage());
-        }
     }
 
     /**
      * @throws CacheFileException
+     * @throws CannotLoadConfiguration
      */
     private static function loadCache(ContainerBuilder $container, SplFileInfo $cacheFile): void
     {
+        $loader = new PhpFileLoader($container, new FileLocator([self::DEPTRAC_INTERNAL_CONFIG_PATH]));
+
         if (!file_exists($cacheFile->getPathname())) {
             $dirname = $cacheFile->getPath() ?: '.';
 
@@ -158,6 +155,11 @@ final class ServiceContainerBuilder
         }
 
         $container->setParameter('cache_file', $cacheFile->getPathname());
+        try {
+            $loader->load('cache.php');
+        } catch (Exception $exception) {
+            throw CannotLoadConfiguration::fromCache('cache.php', $exception->getMessage());
+        }
     }
 
     /**
