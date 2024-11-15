@@ -5,15 +5,19 @@ declare(strict_types=1);
 namespace Tests\Qossmic\Deptrac\Supportive\DependencyInjection;
 
 use PHPUnit\Framework\TestCase;
+use Qossmic\Deptrac\Core\Ast\Parser\NikicPhpParser\NikicPhpParser;
 use Qossmic\Deptrac\Supportive\DependencyInjection\ServiceContainerBuilder;
 
 final class ServiceContainerBuilderTest extends TestCase
 {
     public function testBuildsContainerWithDefaultParameters(): void
     {
-        $builder = new ServiceContainerBuilder(__DIR__);
+        $builder = (new ServiceContainerBuilder(__DIR__))->withConfig(__DIR__.'/config/custom.yaml');
 
         $container = $builder->build(null, false);
+
+        // test service override is possible
+        self::assertSame(CustomPhpParser::class, $container->getDefinition(NikicPhpParser::class)->getClass());
 
         self::assertTrue($container->getParameter('ignore_uncovered_internal_classes'));
         self::assertSame(

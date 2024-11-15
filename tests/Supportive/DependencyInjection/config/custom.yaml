@@ -1,0 +1,3 @@
+services:
+  Qossmic\Deptrac\Core\Ast\Parser\NikicPhpParser\NikicPhpParser:
+    class: Tests\Qossmic\Deptrac\Supportive\DependencyInjection\CustomPhpParser
